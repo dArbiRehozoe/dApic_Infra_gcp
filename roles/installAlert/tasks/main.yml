@@ -1,0 +1,41 @@
+---
+- name: Create directory for Alertmanager
+  file:
+    path: /opt/alertmanager
+    state: directory
+
+- name: Download Alertmanager
+  get_url:
+    url: https://github.com/prometheus/alertmanager/releases/download/v0.25.0/alertmanager-0.25.0.linux-amd64.tar.gz
+    dest: /opt/alertmanager/alertmanager-0.25.0.linux-amd64.tar.gz
+
+- name: Extract Alertmanager
+  ansible.builtin.unarchive:
+    src: /opt/alertmanager/alertmanager-0.25.0.linux-amd64.tar.gz
+    dest: /opt/alertmanager
+    remote_src: yes
+
+- name: Rename alertmanager binary
+  command: mv /opt/alertmanager/alertmanager-0.25.0.linux-amd64/alertmanager /opt/alertmanager/alertmanager
+
+- name: Create Alertmanager configuration directory
+  file:
+    path: /etc/alertmanager
+    state: directory
+
+- name: Copy alertmanager.yml configuration file
+  copy:
+    src: alertmanager.yml
+    dest: /etc/alertmanager/alertmanager.yml
+    mode: 0644
+
+- name: Start Alertmanager service
+  become: true
+  shell: "nohup /opt/alertmanager/alertmanager --config.file /etc/alertmanager/alertmanager.yml --web.listen-address=:9093 > /dev/null 2>&1 &"
+  become_user: root
+
+
+
+
+
+  

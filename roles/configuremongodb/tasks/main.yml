@@ -1,0 +1,15 @@
+---
+- name: Configure MongoDB to listen on all interfaces
+  replace:
+    path: /etc/mongod.conf
+    regexp: 'bindIp:.*'
+    replace: 'bindIp: 0.0.0.0'
+
+- name: Restart MongoDB service
+  systemd:
+    name: mongod
+    state: restarted
+    
+- name: Create MongoDB user darbi with password darbi for database dapic
+  command: 
+    cmd: "mongo admin --eval \"db.createUser({ user: 'darbi', pwd: 'darbi', roles: [{ role: 'readWrite', db: 'dapic' }] })\""

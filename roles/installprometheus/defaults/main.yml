@@ -1,0 +1,2 @@
+prometheus_targets: "{{ groups[item] | map('extract', hostvars, ['networkInterfaces', 0, 'accessConfigs', 0, 'natIP']) | list }}"
+  

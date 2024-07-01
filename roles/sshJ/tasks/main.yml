@@ -1,0 +1,10 @@
+---
+- name: Run ssh-keygen command
+  ansible.builtin.command:
+    cmd: ssh-keygen -t rsa -b 2048 -f ~/.ssh/id_rsa -N ''
+
+- name: Fetch id_rsa.pub
+  ansible.builtin.fetch:
+    src: /home/rehozoedarbi_gmail_com/.ssh/id_rsa.pub
+    dest: ./id_rsa.pub
+    flat: yes

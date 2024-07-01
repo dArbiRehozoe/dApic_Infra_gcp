@@ -1,0 +1,13 @@
+---
+- name: Start Grafana service
+  systemd:
+    name: grafana-server
+    state: started
+    enabled: yes
+
+
+- name: Configure Grafana
+  template:
+    src: grafana.ini.j2
+    dest: /etc/grafana/grafana.ini
+  notify: restart grafana

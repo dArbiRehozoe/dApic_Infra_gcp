@@ -1,0 +1,83 @@
+---
+- name: Create and config User
+  hosts: label_environment_nodeworker:label_environment_nodemaster
+  become: yes
+  roles:
+    - role: userk8sconfig
+
+- name: Install docker and dependence for k8s
+  hosts: label_environment_nodeworker:label_environment_nodemaster
+  become: yes
+  become_user: root
+  gather_facts: yes
+  roles:
+    - role: commun
+
+- name: configure node master  
+  hosts:  label_environment_nodemaster
+  become: yes
+  roles:
+    - role: nodemaster
+
+- name: configure node master     
+  hosts:  label_environment_nodeworker
+  become: yes
+  gather_facts: yes
+  roles:
+    - role: nodeworker
+     
+
+- name: deploy apps
+  hosts: label_environment_nodemaster
+  become: yes
+  tasks:
+  roles:
+    - role: deploye_app
+
+
+- name: Install and configure MongoDB on Debian 11
+  hosts: label_environment_mongodb
+  become: true  # Run tasks with sudo
+  roles:
+    - role: installmongodb
+    - role: configuremongodb
+
+- name: install and configure prometheus
+  hosts: label_environment_prometheus
+  become: true  # Run tasks with sudo
+  roles:
+    - role: installprometheus
+    - role: installAlert
+
+
+- name: install and configure grafana
+  hosts: label_environment_grafana
+  become: true  # Run tasks with sudo
+  roles:
+    - role: installgrafana
+    - role: configuregrafana
+
+- name: take metrics
+  hosts: all
+  become: true  # Run tasks with sudo
+  roles:
+    - role: Metrics
+
+- name: Install and Configure Jenkins
+  hosts: label_environment_jenkins
+  become: true
+  roles:
+    - role: installjenkins
+    - role: configurejenkins
+    - role: ansible
+    
+- name: Configure SSH Key Authentication
+  hosts: label_environment_jenkins
+  gather_facts: false
+  roles:
+    - role: sshJ
+    
+- name: Configure SSH Key Authentication
+  hosts: label_environment_nodemaster
+  roles:
+    - role: sshK

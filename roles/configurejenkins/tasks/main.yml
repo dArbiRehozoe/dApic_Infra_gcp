@@ -1,0 +1,21 @@
+- name: Add Jenkins to Docker group
+  become: true
+  become_user: root
+  command: usermod -aG docker jenkins
+
+- name: Restart Jenkins service
+  become: true
+  become_user: root
+  service:
+    name: jenkins
+    state: restarted
+      
+- name: Get initial admin password
+  shell: cat /var/lib/jenkins/secrets/initialAdminPassword
+  register: initial_admin_password
+
+
+- name: Display initial admin password
+  debug:
+    var: initial_admin_password.stdout
+

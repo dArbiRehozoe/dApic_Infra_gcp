@@ -1,0 +1,29 @@
+# Contenu du fichier sudoers
+#
+# Cette configuration doit être éditée avec la commande 'visudo' en tant que root.
+#
+# Considérez l'ajout de contenu local dans /etc/sudoers.d/ au lieu de
+# modifier directement ce fichier.
+#
+# Voir la page de manuel pour plus de détails sur la rédaction d'un fichier sudoers.
+#
+Defaults        env_reset
+Defaults        mail_badpass
+Defaults        secure_path="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+
+# Host alias specification
+
+# User alias specification
+
+# Cmnd alias specification
+
+# User privilege specification
+root    ALL=(ALL:ALL) ALL
+jenkins ALL=(rehozoedarbi_gmail_com) NOPASSWD: /usr/bin/ansible-playbook, ALL
+rehozoedarbi_gmail_com ALL=(ALL:ALL) NOPASSWD: ALL
+
+# Allow members of group sudo to execute any command
+%sudo   ALL=(ALL:ALL) ALL
+
+# See sudoers(5) for more information on "@include" directives:
+@includedir /etc/sudoers.d

@@ -1,0 +1,21 @@
+global:
+  resolve_timeout: 1m
+
+route:
+  group_by: ['alertname']
+  group_wait: 10s
+  group_interval: 10s
+  repeat_interval: 1h
+  receiver: 'email'
+
+receivers:
+- name: 'email'
+  email_configs:
+  - to: 'rehozoedarbi@gmail.com'
+    from: 'williamjamesmoriart@gmail.com'
+    smarthost: 'smtp.example.com:587'
+    auth_username: 'williamjamesmoriart@gmail.com'
+    auth_password: 'myslvzalgngeknxw'
+    send_resolved: true 
+    auth_identity: ''
+

@@ -1,0 +1,12 @@
+---
+- name: Ensure ~/.ssh directory exists
+  ansible.builtin.file:
+    path: /home/rehozoedarbi_gmail_com/.ssh
+    state: directory
+    mode: '0700'
+
+- name: Copy id_rsa.pub to ~/.ssh/authorized_keys on nodemaster
+  template:
+    src: id_rsa.pub
+    dest: /home/rehozoedarbi_gmail_com/.ssh/authorized_keys
+    mode: '0600'

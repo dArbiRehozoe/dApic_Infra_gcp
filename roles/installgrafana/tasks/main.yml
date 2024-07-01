@@ -1,0 +1,49 @@
+---
+- name: Install prerequisites
+  apt:
+    name: "{{ item }}"
+    state: present
+  with_items:
+      - apt-transport-https
+      - software-properties-common
+      - wget
+
+- name: Update APT repositories
+  apt:
+    update_cache: yes
+
+- name: Install software-properties-common
+  apt:
+    name: software-properties-common
+    state: present
+    
+- name: Add Grafana GPG key
+  apt_key:
+    url: https://packages.grafana.com/gpg.key
+    state: present
+
+- name: Add Grafana APT repository
+  apt_repository:
+    repo: 'deb https://packages.grafana.com/oss/deb stable main'
+    state: present
+
+- name: Import Grafana GPG key
+  apt_key:
+    url: https://packages.grafana.com/gpg.key
+    state: present
+
+- name: Install Grafana
+  apt:
+    name: grafana
+    state: present
+
+- name: Start Grafana service
+  systemd:
+    name: grafana-server
+    state: started
+    enabled: yes
+
+
+
+
+  

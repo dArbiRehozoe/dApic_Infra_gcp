@@ -1,0 +1,19 @@
+global:
+  resolve_timeout: 30s
+  smtp_smarthost: 'smtp.gmail.com:587'
+  smtp_from: 'williamjamesmoriart@gmail.com'
+  smtp_auth_username: 'williamjamesmoriart@gmail.com'
+  smtp_auth_password: 'fdlw fjsq tvhi elrr'
+route:
+  group_by: ['job']
+  group_wait: 10s
+  group_interval: 1m
+  repeat_interval: 1h
+  receiver: 'email'
+
+
+receivers:
+- name: 'email'
+  email_configs:
+  - to: 'williamjamesmoriart@gmail.com'
+

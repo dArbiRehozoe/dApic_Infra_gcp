@@ -1,0 +1,35 @@
+---
+- name: Update apt cache
+  apt:
+    update_cache: yes
+
+- name: Install Java
+  apt:
+    name: openjdk-17-jdk
+    state: latest
+    install_recommends: no
+
+    
+- name: Import Jenkins GPG key manually
+  command: apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 5BA31D57EF5975CA
+
+- name: Update apt cache (after adding key)
+  apt:
+    update_cache: yes
+
+
+- name: Add Jenkins repository
+  apt_repository:
+    repo: deb http://pkg.jenkins.io/debian-stable binary/
+    state: present
+
+- name: Install Jenkins
+  apt:
+    name: jenkins
+    state: present
+  notify: Start Jenkins service
+
+- name: Wait for Jenkins to start
+  wait_for:
+    port: 8080
+    timeout: 60

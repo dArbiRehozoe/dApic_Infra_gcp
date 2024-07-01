@@ -1,0 +1,53 @@
+global:
+  scrape_interval: 15s
+
+rule_files:
+  - 'prometheus.rules.yml'
+
+scrape_configs:
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['localhost:9090']
+
+  - job_name: 'stackdriver-exporter-grafana'
+    static_configs:
+      - targets:
+          {% for host in groups['label_environment_grafana'] %}
+          - '{{ hostvars[host]['networkInterfaces'][0]['accessConfigs'][0]['natIP'] }}:9255'
+          {% endfor %}
+  
+  - job_name: 'stackdriver-exporter-jenkins'
+    static_configs:
+      - targets:
+          {% for host in groups['label_environment_jenkins'] %}
+          - '{{ hostvars[host]['networkInterfaces'][0]['accessConfigs'][0]['natIP'] }}:9255'
+          {% endfor %}
+  
+  - job_name: 'stackdriver-exporter-nodemaster'
+    static_configs:
+      - targets:
+          {% for host in groups['label_environment_nodemaster'] %}
+          - '{{ hostvars[host]['networkInterfaces'][0]['accessConfigs'][0]['natIP'] }}:9255'
+          {% endfor %}
+  
+  - job_name: 'stackdriver-exporter-mongodb'
+    static_configs:
+      - targets:
+          {% for host in groups['label_environment_mongodb'] %}
+          - '{{ hostvars[host]['networkInterfaces'][0]['accessConfigs'][0]['natIP'] }}:9255'
+          {% endfor %}
+
+  - job_name: 'stackdriver-exporter-nodeworker'
+    static_configs:
+      - targets:
+          {% for host in groups['label_environment_nodeworker'] %}
+          - '{{ hostvars[host]['networkInterfaces'][0]['accessConfigs'][0]['natIP'] }}:9255'
+          {% endfor %}
+          
+alerting:
+  alertmanagers:
+  - static_configs:
+    - targets:
+      {% for host in groups['label_environment_prometheus'] %}
+      - '{{ hostvars[host]['networkInterfaces'][0]['accessConfigs'][0]['natIP'] }}:9093'
+      {% endfor %}

@@ -1,0 +1,21 @@
+---
+- name: Import MongoDB GPG key
+  shell: "wget -qO - https://www.mongodb.org/static/pgp/server-5.0.asc | gpg --dearmor -o /usr/share/keyrings/mongodb-archive-keyring.gpg"
+  args:
+    executable: /bin/bash
+
+- name: Add MongoDB repository
+  apt_repository:
+    repo: "deb [signed-by=/usr/share/keyrings/mongodb-archive-keyring.gpg] https://repo.mongodb.org/apt/debian buster/mongodb-org/5.0 main"
+    state: present
+
+- name: Install MongoDB
+  apt:
+    name: mongodb-org
+    state: present
+  notify: Start mongodb service
+  
+- name: Enable MongoDB service
+  systemd:
+    name: mongod
+    enabled: yes
